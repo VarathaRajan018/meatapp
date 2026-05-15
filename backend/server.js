@@ -24,6 +24,13 @@ app.get('/', (req, res) => {
     res.send('Meat Booking API is Running!');
 });
 
+app.get('/api', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'Backend API Working Successfully'
+  });
+});
+
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);

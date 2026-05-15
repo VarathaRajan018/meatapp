@@ -334,11 +334,13 @@ const styles = StyleSheet.create({
         elevation: 4,
     },
     loginButtonText: {
-        ...Typography.button,
-        color: Colors.white,
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '700',
+    fontStyle: 'italic',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+},
     footerLinks: {
         flexDirection: 'row',
         justifyContent: 'space-between',

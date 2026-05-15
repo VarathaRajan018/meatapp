@@ -2,7 +2,8 @@ import React, { createContext, useState, useContext, ReactNode, useEffect } from
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ─── Backend URL ────────────────────────────────────────────────────────────
-const BACKEND_URL = 'http://10.179.52.215:3001/api';
+//const BACKEND_URL = 'http://10.179.52.215:3001/api';
+const BACKEND_URL = 'http://18.212.77.90:3001/api';
 
 const isMongoId = (id: string) => /^[a-f\d]{24}$/i.test(id);
 

@@ -308,18 +308,27 @@ const styles = StyleSheet.create({
         color: Colors.text,
     },
     loginButton: {
-        height: 52,
-        backgroundColor: Colors.primary,
-        borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: Spacing.s,
-        shadowColor: Colors.primary,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 4,
-    },
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+
+    backgroundColor: '#C1121F',
+
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+
+    marginTop: Spacing.l,
+
+    shadowColor: '#C1121F',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 10,
+
+    borderWidth: 3,
+    borderColor: '#FFB3B3',
+},
     loginButtonAdmin: {
         height: 52,
         backgroundColor: '#C0392B',

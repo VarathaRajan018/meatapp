@@ -1,4 +1,4 @@
-name: Deploy MeatApp to EC2
+name: Deploy MeatApp Fullstack
 
 on:
   push:
@@ -11,36 +11,36 @@ jobs:
 
     steps:
 
-      # Checkout Repository
+      # Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Install Node.js
+      # Setup Node
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # Install dependencies
-      - name: Install Dependencies
+      # Install frontend dependencies
+      - name: Install Frontend Dependencies
         run: npm install
 
-      # Build Expo Web App
-      - name: Build Expo Web
+      # Build Expo frontend
+      - name: Build Frontend
         run: npx expo export --platform web
 
-      # Copy dist folder to EC2
-      - name: Copy dist to EC2
+      # Copy full project to EC2
+      - name: Copy Project to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "dist/*"
-          target: "/home/ubuntu/meatapp-dist"
+          source: "."
+          target: "/home/ubuntu/meatapp"
 
-      # Deploy using SSH
-      - name: Deploy to NGINX
+      # Deploy frontend + backend
+      - name: Deploy Application
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -49,11 +49,21 @@ jobs:
 
           script: |
 
-            # Remove old frontend
+            # FRONTEND DEPLOYMENT
+
             sudo rm -rf /var/www/html/*
 
-            # Copy new frontend
-            sudo cp -r /home/ubuntu/meatapp-dist/dist/* /var/www/html/
+            sudo cp -r /home/ubuntu/meatapp/dist/* /var/www/html/
 
-            # Restart nginx
             sudo systemctl restart nginx
+
+
+            # BACKEND DEPLOYMENT
+
+            cd /home/ubuntu/meatapp/backend
+
+            npm install
+
+            pm2 restart backend || pm2 start server.js --name backend
+
+            pm2 save

@@ -1,5 +1,5 @@
 export const Colors = {
-    primary: '#E31C25', // Premium Red (like raw meat/freshness)
+    primary: '#2563EB', // Premium Red (like raw meat/freshness)
     secondary: '#2D3436', // Dark Grey for text
     background: '#FFFFFF',
     surface: '#F5F6FA',

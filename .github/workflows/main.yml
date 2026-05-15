@@ -1,59 +1,59 @@
-# Workflow Name
-name: Deploy Static Website to EC2
+name: Deploy MeatApp to EC2
 
-# Run workflow when pushing to main branch
 on:
   push:
     branches:
       - main
 
 jobs:
-
-  # Deployment Job
   deploy:
-
-    # GitHub virtual machine
     runs-on: ubuntu-latest
 
     steps:
 
-      # Download repository code
+      # Checkout Repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Copy index.html into EC2
-      - name: Copy File to EC2
+      # Install Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Build Expo Web App
+      - name: Build Expo Web
+        run: npx expo export --platform web
+
+      # Copy dist folder to EC2
+      - name: Copy dist to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
-
-          # EC2 Public IP
           host: ${{ secrets.EC2_HOST }}
-
-          # Ubuntu Username
           username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "dist/*"
+          target: "/home/ubuntu/meatapp-dist"
 
-          # PEM Private Key
-          key: ${{ secrets.EC2_KEY }}
-
-          # File to copy
-          source: "index.html"
-
-          # Temporary destination
-          target: "/home/ubuntu"
-
-      # Move file into NGINX folder
+      # Deploy using SSH
       - name: Deploy to NGINX
         uses: appleboy/ssh-action@v1.0.3
         with:
-
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY }}
 
           script: |
 
-            # Move HTML file
-            sudo mv /home/ubuntu/index.html /var/www/html/index.html
+            # Remove old frontend
+            sudo rm -rf /var/www/html/*
 
-            # Restart NGINX
+            # Copy new frontend
+            sudo cp -r /home/ubuntu/meatapp-dist/dist/* /var/www/html/
+
+            # Restart nginx
             sudo systemctl restart nginx
